@@ -1,8 +1,20 @@
-import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useTheme } from "../hooks/useTheme";
+import { useTranslation } from "react-i18next";
 
 const Header = () => {
     const { theme, toggleTheme, increaseFont, decreaseFont, resetFont } = useTheme();
+    
+    const { i18n } = useTranslation();
+    const location = useLocation();
+
+    const handleLanguageChange = ({ newLang }) => {
+        if (newLang === i18n.language) return;
+
+        const pathWithoutLang = location.pathname.replace(/^\/(en|ka)/, '');
+        const newUrl = `/${newLang}${pathWithoutLang}${location.search}${location.hash}`;
+        window.location.href = newUrl;
+    };
 
     return (
         <header className="flex justify-between items-center p-4 border-b border-gray-500">
@@ -13,7 +25,12 @@ const Header = () => {
                     Normal Website
                 </a>
 
-                {/* Font controls */}
+                <button onClick={() => handleLanguageChange({
+                    newLang: i18n.language === 'en' ? "ka" : 'en'
+                })} className="px-2 border rounded-lg" aria-label="Decrease text size">
+                    {i18n.language === 'en' ? "KA" : 'EN'}
+                </button>
+
                 <div className="flex gap-2 items-center">
                     <button onClick={decreaseFont} className="px-2 border rounded-lg" aria-label="Decrease text size">
                         A-
