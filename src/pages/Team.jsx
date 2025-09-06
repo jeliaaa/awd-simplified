@@ -1,19 +1,23 @@
 import { Link } from "react-router-dom"
+import { useApiStore } from "../store/apiStore"
+import { useEffect } from "react"
 
 const Team = () => {
-    const routes = [
-        { id: 0, title: "Name Surname" },
-        { id: 1, title: "Name Surname" },
-    ]
+    const { fetchMembers, members } = useApiStore()
+
+    useEffect(() => {
+        fetchMembers()
+    }, [])
+    
     return (
         <ul className="flex flex-col gap-8 w-full">
-            {routes.map((route) => (
-                <li key={route.id}>
+            {members.map((member) => (
+                <li key={member.id}>
                     <Link
-                        to={`/about/team/${route.id}`}
+                        to={`/about/team/${member.id}`}
                         className="block w-full text-center py-6 border-b-2 border-gray-500 hover:bg-gray-200 hover:text-black"
                     >
-                        {route.title} {route.id}
+                        {member.firstname} {member.lastname}
                     </Link>
                 </li>))}
         </ul>

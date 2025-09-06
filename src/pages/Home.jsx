@@ -1,13 +1,16 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 const Home = () => {
+    const { t } = useTranslation()
+
     const routes = [
-        { id: 0, title: "About", to: "/about" },
-        { id: 1, title: "Projects", to: "/projects" },
-        { id: 2, title: "Stories of women with disabilities", to: "/stories" },
-        { id: 3, title: "Calendar", to: "/calendar" },
-        { id: 4, title: "Blog", to: "/blog" },
-        { id: 5, title: "Contact Us", to: "/contact-us" },
+        { id: 0, title: t("about"), to: "/about" },
+        { id: 1, title: t("projects"), to: "/projects" },
+        { id: 2, title: t("stories_of_women_with_disabilities"), to: "/stories" },
+        { id: 3, title: t("calendar"), to: "/calendar" },
+        { id: 4, title: t("blog"), to: "/blog" },
+        { id: 5, title: t("contact"), to: "/contact-us" },
     ]
     return (
         <ul className="flex flex-col gap-8 w-full">

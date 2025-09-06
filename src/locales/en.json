@@ -1,3 +1,14 @@
 {
-    
+  "back": "Back",
+  "about": "About",
+  "projects": "Projects",
+  "stories_of_women_with_disabilities": "Stories of Women with Disabilities",
+  "calendar": "Calendar",
+  "blog": "Blog",
+  "contact": "Contact",
+  "information": "Information",
+  "team": "Team",
+  "loading": "Loading..",
+  "main_page": "Main Page",
+  "back_to_the_website": "Back to the website"
 }

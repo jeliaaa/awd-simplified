@@ -1,10 +1,14 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 const AboutNav = () => {
+    const { t } = useTranslation()
+
     const routes = [
-        { id: 0, title: "Info", to: "/about/info" },
-        { id: 1, title: "Team", to: "/about/team" },
+        { id: 0, title: t("information"), to: "/about/info" },
+        { id: 1, title: t("team"), to: "/about/team" },
     ]
+    
     return (
         <ul className="flex flex-col gap-8 w-full">
             {routes.map((route) => (

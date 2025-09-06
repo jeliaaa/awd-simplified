@@ -6,6 +6,7 @@ export const useApiStore = create((set) => ({
     about: null,
     blog: [],
     members: [],
+    membersSingle: null,
     projects: [],
     blogSingle: null,
     events: [],
@@ -30,6 +31,16 @@ export const useApiStore = create((set) => ({
             set({ loading: false })
         } catch (error) {
             console.error('Failed to fetch categories:', error);
+            set({ loading: false })
+        }
+    },
+    fetchMembersSingle: async (memberId) => {
+        set({ loading: true })
+        try {
+            const res = await apiV2.get(`/member/details/${memberId}`);
+            set({ membersSingle: res.data, loading: false });
+        } catch (error) {
+            console.error('Failed to fetch member:', error);
             set({ loading: false })
         }
     },
