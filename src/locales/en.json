@@ -10,5 +10,15 @@
   "team": "Team",
   "loading": "Loading..",
   "main_page": "Main Page",
-  "back_to_the_website": "Back to the website"
+  "back_to_the_website": "Back to the Website",
+  "decrease_font": "Decrease Font",
+  "increase_font": "Increase Font",
+  "white_font": "White Text",
+  "green_font": "Green Text",
+  "yellow_font": "Yellow Text",
+  "english": "English",
+  "georgian": "Georgian",
+  "default": "Reset",
+  "dark_bg": "Dark Background",
+  "light_bg": "Light Background"
 }

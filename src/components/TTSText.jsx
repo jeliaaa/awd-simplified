@@ -2,34 +2,35 @@ import React, { useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { useTTSStore } from "../store/useTTSStore";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import clsx from "clsx";
 
-const TTSText = ({ content, html = false }) => {
-  const { playTTS, activeText, audioDuration, loading } = useTTSStore();
+const TTSText = ({ 
+  link, 
+  func, 
+  content, 
+  html = false, 
+  className, 
+  children = null 
+}) => {
+  const { playTTS, activeText, audioDuration, loading, stopTTS } = useTTSStore();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const paraRef = React.useRef(null);
-  const [height, setHeight] = useState(0)
+  const [height, setHeight] = useState(0);
 
   const handleGetHeight = () => {
     if (paraRef.current) {
       const rect = paraRef.current.getBoundingClientRect();
-      rect?.height && setHeight(rect?.height)
+      rect.height && setHeight(rect.height);
     }
   };
 
   const paragraphs = useMemo(() => {
     if (!content) return [];
 
-    let text = "";
+    let text = html ? new DOMParser().parseFromString(content, "text/html").body.textContent || "" : content;
 
-    if (html) {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(content, "text/html");
-      text = doc.body.textContent || "";
-    } else {
-      text = content;
-    }
-
-    // ორ ხაზზე დაშორებული პარაგრაფები
     const rawParagraphs = text
       .split(/\r?\n\s*\r?\n/)
       .map((p) => p.trim())
@@ -39,69 +40,45 @@ const TTSText = ({ content, html = false }) => {
   }, [content, html]);
 
   function splitTextIntoChunks(rawParagraphs, maxLen = 500) {
-    const abbreviations = [
-      "e.g", "i.e", "etc", "mr", "mrs", "dr", "sr", "jr", "st",
-      "a.m", "p.m", "vs", "etc", // დამატებითი ინგლისური
-      "ა.შ", "ბმ", "გა" // ქართული
-    ];
+    const abbreviations = ["e.g", "i.e", "etc", "mr", "mrs", "dr", "sr", "jr", "st", "a.m", "p.m", "vs", "ა.შ", "ბმ", "გა"];
 
-    // ამოწმებს არის თუ არა სიტყვა აბრევიატურა (მომავალი წერტილებით)
-    function isAbbreviation(word) {
-      const w = word.toLowerCase().replace(/[.!?]*$/, "");
-      return abbreviations.some(abbr => abbr.toLowerCase() === w);
-    }
+    const isAbbreviation = (word) => abbreviations.some(abbr => abbr.toLowerCase() === word.toLowerCase().replace(/[.!?]*$/, ""));
 
-    // ფუნქცია წინადადებების გაყოფისთვის
-    function splitIntoSentences(text) {
+    const splitIntoSentences = (text) => {
       const sentences = [];
       let buffer = "";
-      let tokens = text.match(/[^.!?]+[.!?]*|\s+/g) || [];
+      const tokens = text.match(/[^.!?]+[.!?]*|\s+/g) || [];
 
-      for (let i = 0; i < tokens.length; i++) {
-        const token = tokens[i];
+      for (let token of tokens) {
         buffer += token;
-
-        // თუ ტოკენი სრულდება . ! ან ?
         if (/[.!?]/.test(token.trim().slice(-1))) {
-          // ვეძებთ უკან სიტყვას, რომ შევამოწმოთ აბრევიატურა
           const words = buffer.trim().split(/\s+/);
-          const lastWord = words[words.length - 1];
-
-          if (!isAbbreviation(lastWord)) {
+          if (!isAbbreviation(words[words.length - 1])) {
             sentences.push(buffer.trim());
             buffer = "";
           }
         }
       }
       if (buffer.trim()) sentences.push(buffer.trim());
-
       return sentences;
-    }
+    };
 
     const result = [];
     let currentChunk = "";
 
     rawParagraphs.forEach((para) => {
       const sentences = splitIntoSentences(para);
-
       sentences.forEach((sentence) => {
-        if (!sentence) return;
+        const trimmed = sentence.trim();
+        if (!trimmed) return;
 
-        const trimmedSentence = sentence.trim();
-
-        // თუ შეგვიძლია დავამატოთ არსებული chunk-ში
-        if ((currentChunk + " " + trimmedSentence).trim().length <= maxLen) {
-          currentChunk = (currentChunk ? currentChunk + " " : "") + trimmedSentence;
+        if ((currentChunk + " " + trimmed).trim().length <= maxLen) {
+          currentChunk = (currentChunk ? currentChunk + " " : "") + trimmed;
         } else {
-          if (currentChunk) {
-            result.push(currentChunk.trim());
-          }
-
-          if (trimmedSentence.length > maxLen) {
-            // ძალიან გრძელი წინადადების შემთხვევაში, სიტყვებად დავყოთ
-            const words = trimmedSentence.split(" ");
+          if (currentChunk) result.push(currentChunk.trim());
+          if (trimmed.length > maxLen) {
+            const words = trimmed.split(" ");
             let temp = "";
-
             words.forEach((word) => {
               if ((temp + " " + word).trim().length <= maxLen) {
                 temp = (temp ? temp + " " : "") + word;
@@ -110,71 +87,66 @@ const TTSText = ({ content, html = false }) => {
                 temp = word;
               }
             });
-
             if (temp) result.push(temp.trim());
             currentChunk = "";
           } else {
-            currentChunk = trimmedSentence;
+            currentChunk = trimmed;
           }
         }
       });
     });
-
-    if (currentChunk) {
-      result.push(currentChunk.trim());
-    }
-
+    if (currentChunk) result.push(currentChunk.trim());
     return result;
   }
 
   const handleSpeech = (para) => {
     playTTS(para, 0);
-    handleGetHeight()
+    handleGetHeight();
   };
+
+  const handleClick = () => {
+    stopTTS();
+    if (link) navigate(link);
+    if (func) func();
+  };
+
+  if (children) {
+    return (
+      <div onMouseDown={() => !loading && handleSpeech(content)} onClick={handleClick} className={className}>
+        {children}
+      </div>
+    );
+  }
 
   return (
     <div>
       {paragraphs.map((para, index) => {
         const isActive = activeText === para;
 
-        if (loading && activeText === para && height)
-          return (
-            <div 
-              key={index} 
-              className="mb-6"
-              style={{
-                background: "rgba(138, 43, 226, 0.1)",
-                padding: "4px",
-                borderRadius: "4px",
-                height: height
-              }}
-            >
-              {t("loading")}
-            </div>
-          );
-
         return (
           <div ref={paraRef} key={index} className="mb-6">
-            <div
-              onMouseDown={() => handleSpeech(para)}
-              className="cursor-pointer transition-colors duration-200 relative"
+            <button
+              onMouseDown={() => !loading && handleSpeech(para)}
+              onClick={handleClick}
+              className={clsx("cursor-pointer transition-colors duration-200 relative", className)}
               style={{
                 backgroundColor: isActive ? "rgba(138, 43, 226, 0.1)" : "transparent",
                 padding: "4px",
                 borderRadius: "4px",
               }}
             >
+              {/* {loading && activeText === para && height ? t("loading") : para} */}
               {para}
-            </div>
+            </button>
             {isActive && audioDuration > 0 && (
-                <motion.div
-                  layoutId="underline"
-                  className="h-1 bg-violet-500"
-                  initial={{ width: 0 }}
-                  animate={{ width: "100%" }}
-                  transition={{ duration: audioDuration, ease: "linear" }}
-                />
-              )}
+              <motion.div
+                layoutId="underline"
+                className="h-1 bg-violet-500"
+                initial={{ width: 0 }}
+                animate={{ width: "100%" }}
+                transition={{ duration: audioDuration, ease: "linear" }}
+              />
+            )}
           </div>
         );
       })}

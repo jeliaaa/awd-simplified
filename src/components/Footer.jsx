@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import i18n from "../i18n";
+import TTSText from "./TTSText";
 
 const Footer = () => {
     const navigate = useNavigate();
@@ -37,27 +38,24 @@ const Footer = () => {
     return (
         <div className="w-full flex flex-col md:flex-row justify-center border-b-2 items-center">
             {IsBackBtn && (
-                <button
-                    onClick={handleBack}
-                    className="hover:bg-gray-200 text-center w-full h-full py-6 md:border-0 border-b-2 cursor-pointer hover:text-black"
+                <div
+                    className="hover:bg-gray-200 text-center w-full h-full py-3 md:border-0 border-b-2 cursor-pointer hover:text-black"
                 >
-                    {t("back")}
-                </button>
+                    <TTSText content={t("back")} func={handleBack} className={"w-full h-full"}/>
+                </div>
             )}
             {IsBackBtn && (
-                <Link
-                    to={'/'}
-                    className="hover:bg-gray-200 text-center w-full md:border-l-2 md:border-r-2 md:border-b-0 border-b-2 h-full py-6 cursor-pointer hover:text-black"
+                <div
+                    className="hover:bg-gray-200 text-center w-full md:border-l-2 md:border-r-2 md:border-b-0 border-b-2 h-full py-3 cursor-pointer hover:text-black"
                 >
-                    {t("main_page")}
-                </Link>
+                    <TTSText content={t("main_page")} link={'/'} className={"w-full h-full"}/>
+                </div>
             )}
-            <Link
-                to={`https://aowd.ge/${i18n.language}`}
-                className="hover:bg-gray-200 text-center w-full h-full md:border-0  py-6 cursor-pointer hover:text-black"
+            <div
+                className="hover:bg-gray-200 text-center w-full h-full py-3 md:border-0 border-b-2 cursor-pointer hover:text-black"
             >
-                {t("back_to_the_website")}
-            </Link>
+                <TTSText content={t("back_to_the_website")} link={`https://aowd.ge/${i18n.language}`} className={"w-full h-full"}/>
+            </div>
         </div>
     );
 };

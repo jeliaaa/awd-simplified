@@ -10,5 +10,15 @@
     "team": "გუნდი",
     "loading": "იტვირთება..",
     "main_page": "მთავარ გვერდი",
-    "back_to_the_website": "საიტზე დაბრუნება"
+    "back_to_the_website": "საიტზე დაბრუნება",
+    "decrease_font": "ტექსტის შემცირება",
+    "increase_font": "ტექსტის გაზრდა",
+    "white_font": "თეთრი ტექსტი",
+    "green_font": "მწვანე ტექსტი",
+    "yellow_font": "ყვითელი ტექსტი",
+    "english": "ინგლისური",
+    "georgian": "ქართული",
+    "default": "გასუფთავება",
+    "dark_bg": "შავი ფონი",
+    "light_bg": "თეთრი ფონი"
 }

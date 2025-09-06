@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import TTSText from "../components/TTSText";
 
 const Home = () => {
     const { t } = useTranslation()
@@ -16,12 +17,15 @@ const Home = () => {
         <ul className="flex flex-col gap-8 w-full">
             {routes.map((route) => (
                 <li key={route.id}>
-                    <Link
-                        to={route.to}
-                        className="block w-full text-center py-6 border-b-2 border-gray-500 hover:bg-gray-200 hover:text-black"
+                    <div
+                        className="block w-full text-center py-3 border-b-2 border-gray-500 hover:bg-gray-200 hover:text-black"
                     >
-                        {route.title}
-                    </Link>
+                        <TTSText
+                            className={'w-full h-full'}
+                            content={route.title}
+                            link={route.to}
+                        />
+                    </div>
                 </li>))}
         </ul>
     );

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom"
 import { useApiStore } from "../store/apiStore"
 import { useEffect } from "react"
+import TTSText from "../components/TTSText"
 
 const Team = () => {
     const { fetchMembers, members } = useApiStore()
@@ -13,12 +14,15 @@ const Team = () => {
         <ul className="flex flex-col gap-8 w-full">
             {members.map((member) => (
                 <li key={member.id}>
-                    <Link
-                        to={`/about/team/${member.id}`}
-                        className="block w-full text-center py-6 border-b-2 border-gray-500 hover:bg-gray-200 hover:text-black"
+                    <div
+                        className="block w-full text-center py-3 border-b-2 border-gray-500 hover:bg-gray-200 hover:text-black"
                     >
-                        {member.firstname} {member.lastname}
-                    </Link>
+                        <TTSText
+                            className={'w-full h-full'}
+                            link={`/about/team/${member.id}`}
+                            content={`${member.firstname} ${member.lastname}`}
+                        />
+                    </div>
                 </li>))}
         </ul>
     )
