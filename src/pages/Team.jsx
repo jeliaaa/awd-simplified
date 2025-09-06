@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom"
 import { useApiStore } from "../store/apiStore"
 import { useEffect } from "react"
 import TTSText from "../components/TTSText"
@@ -8,7 +7,7 @@ const Team = () => {
 
     useEffect(() => {
         fetchMembers()
-    }, [])
+    }, [fetchMembers])
     
     return (
         <ul className="flex flex-col gap-8 w-full">

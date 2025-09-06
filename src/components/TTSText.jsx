@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from "react";
-import { motion } from "framer-motion";
 import { useTTSStore } from "../store/useTTSStore";
-import { useTranslation } from "react-i18next";
+// import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
 
@@ -15,7 +14,7 @@ const TTSText = ({
 }) => {
   const { playTTS, activeText, audioDuration, loading, stopTTS } = useTTSStore();
   const navigate = useNavigate();
-  const { t } = useTranslation();
+  // const { t } = useTranslation();
   const paraRef = React.useRef(null);
   const [height, setHeight] = useState(0);
 
