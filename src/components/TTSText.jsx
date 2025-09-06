@@ -3,19 +3,22 @@ import { useTTSStore } from "../store/useTTSStore";
 // import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import clsx from "clsx";
+// eslint-disable-next-line no-unused-vars
+import { motion } from "framer-motion";
 
-const TTSText = ({ 
-  link, 
-  func, 
-  content, 
-  html = false, 
-  className, 
-  children = null 
+const TTSText = ({
+  link,
+  func,
+  content,
+  html = false,
+  className,
+  children = null
 }) => {
   const { playTTS, activeText, audioDuration, loading, stopTTS } = useTTSStore();
   const navigate = useNavigate();
   // const { t } = useTranslation();
   const paraRef = React.useRef(null);
+  // eslint-disable-next-line no-unused-vars
   const [height, setHeight] = useState(0);
 
   const handleGetHeight = () => {

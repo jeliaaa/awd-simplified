@@ -25,7 +25,7 @@ const AboutNav = () => {
                             className={"w-full h-full"}
                             fileEn={route.fileEn}
                             fileGe={route.fileGe}
-                            label={route.title}
+                            content={route.title}
                             link={route.to}
                         />
                     </div>
