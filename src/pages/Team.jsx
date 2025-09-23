@@ -8,6 +8,8 @@ const Team = () => {
     useEffect(() => {
         fetchMembers()
     }, [fetchMembers])
+    console.log(members);
+    
     
     return (
         <ul className="flex flex-col gap-8 w-full">

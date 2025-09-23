@@ -7,6 +7,8 @@ import Info from "./pages/Info";
 import AboutNav from "./pages/AboutNav";
 import Team from "./pages/Team";
 import TeamSingle from "./pages/TeamSingle";
+import Projects from "./pages/Projects";
+import ProjectsSingle from "./pages/ProjectsSingle";
 
 const App = () => {
   const { theme, fontSize, textColor } = useTheme();
@@ -26,6 +28,8 @@ const App = () => {
             <Route path="/about/info" element={<Info />} />
             <Route path="/about/team" element={<Team />} />
             <Route path="/about/team/:id" element={<TeamSingle />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/projects/:year" element={<ProjectsSingle   />} />
           </Routes>
           <Footer />
         </main>

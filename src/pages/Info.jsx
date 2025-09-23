@@ -1,10 +1,10 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import { useApiStore } from '../store/apiStore';
 import TTSText from '../components/TTSText';
 import { useTranslation } from 'react-i18next';
 
 const Info = () => {
-  const { loading, about, fetchAbout } = useApiStore();
+  const { about, fetchAbout } = useApiStore();
   const { t } = useTranslation()
 
   useEffect(() => {
