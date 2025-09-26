@@ -5,7 +5,7 @@
     "stories_of_women_with_disabilities": "შშმ ქალთა ისტორიები",
     "calendar": "კალენდარი",
     "blog": "ბლოგი",
-    "contact": "ჩვენს შესახებ",
+    "contact": "კონტაქტი",
     "information": "ინფორმაცია",
     "team": "გუნდი",
     "loading": "იტვირთება..",
@@ -20,5 +20,6 @@
     "georgian": "ქართული",
     "default": "გასუფთავება",
     "dark_bg": "შავი ფონი",
-    "light_bg": "თეთრი ფონი"
+    "light_bg": "თეთრი ფონი",
+    "open": "გახსნა"
 }

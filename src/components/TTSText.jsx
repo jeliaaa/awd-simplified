@@ -111,6 +111,19 @@ const TTSText = ({
     if (link) navigate(link);
     if (func) func();
   };
+  const handlePress = (para) => {
+    if (!loading) {
+      playTTS(para, 0);
+      handleGetHeight();
+    }
+  };
+
+  const handleTap = () => {
+    stopTTS();
+    if (link) navigate(link);
+    if (func) func();
+  };
+
 
   if (children) {
     return (
@@ -128,18 +141,21 @@ const TTSText = ({
         return (
           <div ref={paraRef} key={index} className="mb-6">
             <button
-              onMouseDown={() => !loading && handleSpeech(para)}
-              onClick={handleClick}
-              className={clsx("cursor-pointer transition-colors duration-200 relative", className)}
+              onMouseDown={() => handlePress(para)}
+              onTouchStart={() => handlePress(para)} // mobile
+              onClick={handleTap}
+              className={clsx(
+                "cursor-pointer transition-colors duration-200 relative",
+                "p-3 rounded-md w-full text-center", // easier to tap on mobile
+                className
+              )}
               style={{
                 backgroundColor: isActive ? "rgba(138, 43, 226, 0.1)" : "transparent",
-                padding: "4px",
-                borderRadius: "4px",
               }}
             >
-              {/* {loading && activeText === para && height ? t("loading") : para} */}
               {para}
             </button>
+
             {isActive && audioDuration > 0 && (
               <motion.div
                 layoutId="underline"

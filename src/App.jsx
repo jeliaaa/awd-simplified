@@ -9,6 +9,7 @@ import Team from "./pages/Team";
 import TeamSingle from "./pages/TeamSingle";
 import Projects from "./pages/Projects";
 import ProjectsSingle from "./pages/ProjectsSingle";
+import ProjectsDetail from "./pages/ProjectsDetail";
 
 const App = () => {
   const { theme, fontSize, textColor } = useTheme();
@@ -30,6 +31,7 @@ const App = () => {
             <Route path="/about/team/:id" element={<TeamSingle />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/projects/:year" element={<ProjectsSingle   />} />
+            <Route path="/projects/:year/:id" element={<ProjectsDetail   />} />
           </Routes>
           <Footer />
         </main>

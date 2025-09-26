@@ -2,6 +2,7 @@ import { useLocation } from "react-router-dom";
 import { useTheme } from "../hooks/useTheme";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
+import logo from "../assets/logo.png"
 import TTSText from "./TTSText";
 
 const Header = () => {
@@ -28,7 +29,7 @@ const Header = () => {
     return (
         <header
             className={clsx(
-            "flex justify-center h-[10dvh] items-center px-8 py-4 border-b bg-black text-white",
+            "flex justify-center min-h-[10dvh] h-fit items-center px-8 py-4 border-b bg-black text-white",
             theme === "dark" ? "border-gray-200" : "border-gray-700"
             )}
             role="banner"
@@ -36,13 +37,13 @@ const Header = () => {
             <div className="container flex items-center justify-between">
                 <div className="flex items-center">
                     <img
-                    src="/logo.png"
+                    src={logo}
                     alt="Organization logo"
                     className="h-14"
                     />
                 </div>
 
-                <div className="flex items-center space-x-5 text-white text-sm" role="navigation" aria-label="Accessibility controls">
+                <div className="flex items-center flex-wrap gap-5 text-white text-sm" role="navigation" aria-label="Accessibility controls">
                     <TTSText content={i18n.language === "en" ? t("georgian") : t("english")}>
                         <button
                             onClick={() =>
