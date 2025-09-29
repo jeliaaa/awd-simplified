@@ -29,73 +29,42 @@ const TTSText = ({
   const paragraphs = useMemo(() => {
     if (!content) return [];
 
-    let text = html ? new DOMParser().parseFromString(content, "text/html").body.textContent || "" : content;
+    // If HTML, parse textContent
+    let text = html
+      ? new DOMParser().parseFromString(content, "text/html").body.textContent || ""
+      : content;
 
+    return splitParagraphs(text);
+  }, [content, html]);
+
+  function splitParagraphs(text, maxLen = 400) {
     const rawParagraphs = text
       .split(/\r?\n\s*\r?\n/)
       .map((p) => p.trim())
       .filter((p) => p.length > 0);
 
-    return splitTextIntoChunks(rawParagraphs);
-  }, [content, html]);
-
-  function splitTextIntoChunks(rawParagraphs, maxLen = 500) {
-    const abbreviations = ["e.g", "i.e", "etc", "mr", "mrs", "dr", "sr", "jr", "st", "a.m", "p.m", "vs", "ა.შ", "ბმ", "გა"];
-
-    const isAbbreviation = (word) => abbreviations.some(abbr => abbr.toLowerCase() === word.toLowerCase().replace(/[.!?]*$/, ""));
-
-    const splitIntoSentences = (text) => {
-      const sentences = [];
-      let buffer = "";
-      const tokens = text.match(/[^.!?]+[.!?]*|\s+/g) || [];
-
-      for (let token of tokens) {
-        buffer += token;
-        if (/[.!?]/.test(token.trim().slice(-1))) {
-          const words = buffer.trim().split(/\s+/);
-          if (!isAbbreviation(words[words.length - 1])) {
-            sentences.push(buffer.trim());
-            buffer = "";
-          }
-        }
-      }
-      if (buffer.trim()) sentences.push(buffer.trim());
-      return sentences;
-    };
-
     const result = [];
-    let currentChunk = "";
 
     rawParagraphs.forEach((para) => {
-      const sentences = splitIntoSentences(para);
-      sentences.forEach((sentence) => {
-        const trimmed = sentence.trim();
-        if (!trimmed) return;
+      if (para.length <= maxLen) {
+        result.push(para);
+      } else {
+        const words = para.split(" ");
+        let currentChunk = "";
 
-        if ((currentChunk + " " + trimmed).trim().length <= maxLen) {
-          currentChunk = (currentChunk ? currentChunk + " " : "") + trimmed;
-        } else {
-          if (currentChunk) result.push(currentChunk.trim());
-          if (trimmed.length > maxLen) {
-            const words = trimmed.split(" ");
-            let temp = "";
-            words.forEach((word) => {
-              if ((temp + " " + word).trim().length <= maxLen) {
-                temp = (temp ? temp + " " : "") + word;
-              } else {
-                if (temp) result.push(temp.trim());
-                temp = word;
-              }
-            });
-            if (temp) result.push(temp.trim());
-            currentChunk = "";
+        words.forEach((word) => {
+          if ((currentChunk + " " + word).trim().length <= maxLen) {
+            currentChunk = (currentChunk ? currentChunk + " " : "") + word;
           } else {
-            currentChunk = trimmed;
+            if (currentChunk) result.push(currentChunk.trim());
+            currentChunk = word;
           }
-        }
-      });
+        });
+
+        if (currentChunk) result.push(currentChunk.trim());
+      }
     });
-    if (currentChunk) result.push(currentChunk.trim());
+
     return result;
   }
 
@@ -124,11 +93,11 @@ const TTSText = ({
         const isActive = activeText === para;
 
         return (
-          <div ref={paraRef} key={index} className="mb-6">
+          <div ref={paraRef} key={index} className={clsx("mb-6 !p-0", html && "text-left")}>
             <button
               onMouseDown={() => !loading && handleSpeech(para)}
               onClick={handleClick}
-              className={clsx("cursor-pointer transition-colors duration-200 relative", className)}
+              className={clsx("cursor-pointer transition-colors duration-200 relative", className, html && "text-left")}
               style={{
                 backgroundColor: isActive ? "rgba(138, 43, 226, 0.1)" : "transparent",
                 padding: "4px",

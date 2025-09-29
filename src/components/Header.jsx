@@ -3,6 +3,7 @@ import { useTheme } from "../hooks/useTheme";
 import { useTranslation } from "react-i18next";
 import clsx from "clsx";
 import TTSText from "./TTSText";
+import Logo from '../assets/awd_logo.webp'
 
 const Header = () => {
     const { theme, toggleTheme, setThemeDark, increaseFont, decreaseFont, resetFont, setTextColorYellow, setTextColorGreen, resetTextColor, textColor } = useTheme();
@@ -24,7 +25,6 @@ const Header = () => {
         setThemeDark()
     }
 
-
     return (
         <header
             className={clsx(
@@ -36,7 +36,7 @@ const Header = () => {
             <div className="container flex items-center justify-between">
                 <div className="flex items-center">
                     <img
-                    src="/logo.png"
+                    src={Logo}
                     alt="Organization logo"
                     className="h-14"
                     />

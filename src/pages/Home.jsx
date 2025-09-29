@@ -13,6 +13,7 @@ const Home = () => {
         { id: 4, title: t("blog"), to: "/blog" },
         { id: 5, title: t("contact"), to: "/contact-us" },
     ]
+    
     return (
         <ul className="flex flex-col gap-8 w-full">
             {routes.map((route) => (
